@@ -1,5 +1,10 @@
 **How to Run**
 
+text.py is just to see if the webcam works
+The actual demo runs through BotCam.py
+
+
+
 
 Make sure python is installed: 
 python --version
