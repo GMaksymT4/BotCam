@@ -10,51 +10,51 @@ VisionRunningMode = vision.RunningMode
 options = vision.FaceDetectorOptions(
     base_options=BaseOptions(model_asset_path='blaze_face_short_range.tflite'), 
     running_mode=VisionRunningMode.VIDEO,
-    min_detection_confidence=0.5  # Lower for more detections, higher for fewer false positives
+    min_detection_confidence=0.5  
 )
 
 detector = vision.FaceDetector.create_from_options(options)
 
 
-cap = cv2.VideoCapture(0)  # Open webcam
+cap = cv2.VideoCapture(0) 
 blur_enabled = False
 box_enabled = False
 outline_enabled = False
 while True:
-    ret, frame = cap.read()  # Grab frame
+    ret, frame = cap.read() 
     if not ret:
         break
     
-    # Step 1: Convert OpenCV frame (BGR) to MediaPipe Image (RGB implied)
+    
     mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
     
-    # Step 2: Get timestamp in milliseconds (VIDEO mode expects increasing timestamps)
+   
     timestamp_ms = int(time.time() * 1000)
     
-    # Step 3: Run detection
+   
     detection_result = detector.detect_for_video(mp_image, timestamp_ms)
     
-    # Step 4: Draw boxes 
+ 
     for detection in detection_result.detections:
         bbox = detection.bounding_box
-        x = int(bbox.origin_x-10)      # Starting x coordinate
-        y = int(bbox.origin_y-100)      # Starting y coordinate
-        w = int(bbox.width+10)         # Width of box
-        h = int(bbox.height+100)        # Height of box     
+        x = int(bbox.origin_x-10)      
+        y = int(bbox.origin_y-100)      
+        w = int(bbox.width+10)         
+        h = int(bbox.height+100)            
 
 
 
         key = cv2.waitKey(1) & 0xFF
 
         if key == ord('g'):
-            blur_enabled = not blur_enabled     # flip True ↔ False
+            blur_enabled = not blur_enabled     
             print("Blur:", "ON" if blur_enabled else "OFF")   
             
         if key == ord('e'):
-            box_enabled = not box_enabled     # flip True ↔ False
+            box_enabled = not box_enabled     
             print("Box:", "ON" if box_enabled else "OFF")   
         if key == ord('p'):
-            outline_enabled = not outline_enabled     # flip True ↔ False
+            outline_enabled = not outline_enabled     
             print("Outline:", "ON" if outline_enabled else "OFF")
 
 
@@ -63,7 +63,7 @@ while True:
 
         if blur_enabled:
             face_region = frame[y:y+h, x:x+w]
-            # Apply Gaussian blur
+            #blur
             blurred_face = cv2.GaussianBlur(face_region, (35, 35), 25)
                 #99,99,7
                 #35,35,25
